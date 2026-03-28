@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { styles } from "../styles/styles";
 import FormField from "../shared/ui/FormField";
 import { DEFAULT_ADMIN } from "../constants";
+import { validateForm, loginValidationRules } from "../utils/validation";
 import PropTypes from "prop-types";
 
 // Login component - user login form
@@ -44,22 +45,12 @@ export default function Login() {
     setErrorMsg("");
     setFieldErrors({});
     
-    // Validation
-    const errors = {};
-    if (!email) {
-      errors.email = "Email is required";
-    } else if (!email.includes("@") || !email.includes(".")) {
-      errors.email = "Please enter a valid email";
-    }
+    // Validation using optimized validation
+    const formData = { email, password };
+    const validation = validateForm(formData, loginValidationRules);
     
-    if (!password) {
-      errors.password = "Password is required";
-    } else if (password.length < 3) {
-      errors.password = "Password must be at least 3 characters";
-    }
-    
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
+    if (!validation.isValid) {
+      setFieldErrors(validation.errors);
       return;
     }
     

@@ -3,6 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { styles } from "../styles/styles";
 import FormField from "../shared/ui/FormField";
+import { validateForm, registrationValidationRules } from "../utils/validation";
 import PropTypes from "prop-types";
 
 // Registration component - new employee registration form
@@ -31,32 +32,12 @@ export default function Registration() {
   // Registration handle function - validation and registration call
   function handleRegister() {
     setErrorMsg(""); setSuccessMsg(""); setFieldErrors({});
-    const { name, email, password, department } = form;
     
-    // Validation
-    const errors = {};
-    if (!name || name.trim().length < 2) {
-      errors.name = "Name must be at least 2 characters";
-    }
+    // Validation using optimized validation
+    const validation = validateForm(form, registrationValidationRules);
     
-    if (!email) {
-      errors.email = "Email is required";
-    } else if (!email.includes("@") || !email.includes(".")) {
-      errors.email = "Please enter a valid email";
-    }
-    
-    if (!password) {
-      errors.password = "Password is required";
-    } else if (password.length < 6) {
-      errors.password = "Password must be at least 6 characters";
-    }
-    
-    if (!department || department.trim().length < 2) {
-      errors.department = "Department is required";
-    }
-    
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
+    if (!validation.isValid) {
+      setFieldErrors(validation.errors);
       return;
     }
 
