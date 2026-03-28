@@ -127,5 +127,6 @@ export const styles = {
     borderBottom: "1px solid #f1f5f9",
     verticalAlign: "middle",
     color: "#334155",
+    textAlign: "left",
   },
 };

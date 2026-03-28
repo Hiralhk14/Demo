@@ -122,11 +122,12 @@ export default function EmployeeFormModal({ existingEmployee, onClose, onSave })
         <button
           onClick={onClose}
           style={{
-            ...styles.btnSmall("rgba(255,255,255,0.1)"),
+            ...styles.btnSmall("rgba(94, 115, 133, 0.36)"),
             width: "100%",
             padding: "13px",
             fontSize: "15px",
             borderRadius: "10px",
+            border: "1px solid rgba(255,255,255,0.1)",
           }}
         >
           Cancel

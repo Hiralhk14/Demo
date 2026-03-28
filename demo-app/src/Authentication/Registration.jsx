@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 import { styles } from "../styles/styles";
 import FormField from "../shared/ui/FormField";
+import PropTypes from "prop-types";
 
 // Registration component - new employee registration form
-export default function Registration({ onGoToLogin }) {
+export default function Registration() {
+  const navigate = useNavigate();
   const { registerEmployee } = useAuth();
   const [form, setForm] = useState({ name: "", email: "", password: "", department: "" });
   const [errorMsg, setErrorMsg] = useState("");
@@ -126,10 +129,10 @@ export default function Registration({ onGoToLogin }) {
             Submit Registration
           </button>
 
-          <p style={{ textAlign: "center", marginTop: "20px", fontSize: "13px", color: "#a78bfa", }}>
+          <p style={{ textAlign: "center", marginTop: "20px", fontSize: "13px", color: "#a78bfa" }}>
             Already registered?{" "}
             <span
-              onClick={onGoToLogin}
+              onClick={() => navigate('/login')}
               style={{ color: "#a78bfa", cursor: "pointer", fontWeight: "600" }}>
               Sign in
             </span>

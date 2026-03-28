@@ -1,10 +1,9 @@
 import { useState, useMemo } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 import { styles } from "../../styles/styles";
 import { EMPLOYEE_STATUS } from "../../constants";
 import StatsCard from "./StatsCard";
 import EmployeeFormModal from "./EmployeeFormModal";
-import Navbar from "../../shared/ui/Navbar";
 
 // Admin Dashboard component - employee management interface
 export default function AdminDashboard() {
@@ -37,10 +36,7 @@ export default function AdminDashboard() {
 
   return (
     <div style={styles.app}>
-      <Navbar />
-
       <div style={{ padding: "32px", maxWidth: "1100px", margin: "0 auto" }}>
-
         {/* Stats Cards */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "32px" }}>
           {[

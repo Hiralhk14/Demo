@@ -1,5 +1,4 @@
-import { useAuth } from "../../context/AuthContext";
-import Navbar from "../../shared/ui/Navbar";
+import { useAuth } from "../../hooks/useAuth";
 import { styles } from "../../styles/styles";
 
 // Employee Dashboard component - employee welcome page
@@ -8,7 +7,6 @@ export default function EmployeeDashboard() {
 
   return (
     <div style={styles.app}>
-      <Navbar />
       <div style={{ padding: "32px", maxWidth: "700px", margin: "0 auto" }}>
         <div style={{ ...styles.card, textAlign: "center", padding: "48px" }}>
           <div style={{ fontSize: "56px", marginBottom: "16px" }}>👋</div>
