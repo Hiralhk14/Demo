@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { styles } from "../styles/styles";
 import FormField from "../shared/ui/FormField";
+import { DEFAULT_ADMIN } from "../constants";
 
 // Login component - user login form
 export default function Login({ onGoToRegister }) {
@@ -79,6 +80,9 @@ export default function Login({ onGoToRegister }) {
           <h2 style={{ marginTop: 0, marginBottom: "24px", fontSize: "18px" }}>
             Sign In
           </h2>
+          <div style={{ marginBottom: "12px", fontSize: "13px", color: "#86898d" }}>
+            Demo admin credentials: {DEFAULT_ADMIN.email} / {DEFAULT_ADMIN.password}
+          </div>
           {errorMsg && <div style={styles.error}>{errorMsg}</div>}
           <FormField
             label="Email Address"
