@@ -9,11 +9,32 @@ export default function Login({ onGoToRegister }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
 
   // Login handle function - validation and login call
   function handleLogin() {
     setErrorMsg("");
-    if (!email || !password) { setErrorMsg("Please fill in all fields."); return; }
+    setFieldErrors({});
+    
+    // Validation
+    const errors = {};
+    if (!email) {
+      errors.email = "Email is required";
+    } else if (!email.includes("@") || !email.includes(".")) {
+      errors.email = "Please enter a valid email";
+    }
+    
+    if (!password) {
+      errors.password = "Password is required";
+    } else if (password.length < 3) {
+      errors.password = "Password must be at least 3 characters";
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+    
     const result = login(email, password);
     if (!result.success) setErrorMsg(result.message);
   }
@@ -42,6 +63,8 @@ export default function Login({ onGoToRegister }) {
             value={email}
             onChange={setEmail}
             placeholder="you@company.com"
+            required={true}
+            error={fieldErrors.email}
           />
           <FormField
             label="Password"
@@ -49,6 +72,8 @@ export default function Login({ onGoToRegister }) {
             value={password}
             onChange={setPassword}
             placeholder="••••••••"
+            required={true}
+            error={fieldErrors.password}
           />
           <button style={styles.btnPrimary} onClick={handleLogin}>Sign In</button>
 

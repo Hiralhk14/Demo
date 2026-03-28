@@ -9,6 +9,7 @@ export default function Registration({ onGoToLogin }) {
   const [form, setForm] = useState({ name: "", email: "", password: "", department: "" });
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
 
   // Form field update function
   function updateField(field, value) {
@@ -17,10 +18,35 @@ export default function Registration({ onGoToLogin }) {
 
   // Registration handle function - validation and registration call
   function handleRegister() {
-    setErrorMsg(""); setSuccessMsg("");
+    setErrorMsg(""); setSuccessMsg(""); setFieldErrors({});
     const { name, email, password, department } = form;
-    if (!name || !email || !password || !department) { setErrorMsg("All fields are required."); return; }
-    if (password.length < 6) { setErrorMsg("Password must be at least 6 characters."); return; }
+    
+    // Validation
+    const errors = {};
+    if (!name || name.trim().length < 2) {
+      errors.name = "Name must be at least 2 characters";
+    }
+    
+    if (!email) {
+      errors.email = "Email is required";
+    } else if (!email.includes("@") || !email.includes(".")) {
+      errors.email = "Please enter a valid email";
+    }
+    
+    if (!password) {
+      errors.password = "Password is required";
+    } else if (password.length < 6) {
+      errors.password = "Password must be at least 6 characters";
+    }
+    
+    if (!department || department.trim().length < 2) {
+      errors.department = "Department is required";
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
 
     const result = registerEmployee(form);
     if (result.success) {
@@ -56,12 +82,17 @@ export default function Registration({ onGoToLogin }) {
             value={form.name}
             onChange={(v) => updateField("name", v)}
             placeholder="John Doe"
+            required={true}
+            error={fieldErrors.name}
           />
           <FormField
             label="Email Address"
-            type="email" value={form.email}
+            type="email"
+            value={form.email}
             onChange={(v) => updateField("email", v)}
             placeholder="john@company.com"
+            required={true}
+            error={fieldErrors.email}
           />
           <FormField
             label="Password"
@@ -69,12 +100,16 @@ export default function Registration({ onGoToLogin }) {
             value={form.password}
             onChange={(v) => updateField("password", v)}
             placeholder="Min 6 characters"
+            required={true}
+            error={fieldErrors.password}
           />
           <FormField
             label="Department"
             value={form.department}
             onChange={(v) => updateField("department", v)}
             placeholder="e.g. Engineering, HR"
+            required={true}
+            error={fieldErrors.department}
           />
           <button
             style={styles.btnPrimary}

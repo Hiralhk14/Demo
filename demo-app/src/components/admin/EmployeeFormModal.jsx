@@ -14,6 +14,7 @@ export default function EmployeeFormModal({ existingEmployee, onClose, onSave })
     department: existingEmployee?.department || "",
   });
   const [errorMsg, setErrorMsg] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -55,6 +56,8 @@ export default function EmployeeFormModal({ existingEmployee, onClose, onSave })
         value={form.name}
         onChange={(v) => updateField("name", v)}
         placeholder="John Doe"
+        required={true}
+        error={fieldErrors.name}
       />
       <FormField
         label="Email Address"
@@ -62,21 +65,29 @@ export default function EmployeeFormModal({ existingEmployee, onClose, onSave })
         value={form.email}
         onChange={(v) => updateField("email", v)}
         placeholder="john@company.com"
+        required={true}
+        error={fieldErrors.email}
       />
 
-      <FormField
-        label={isEditing ? "New Password (leave blank to keep current)" : "Password"}
-        type="password"
-        value={form.password}
-        onChange={(v) => updateField("password", v)}
-        placeholder={isEditing ? "Leave blank to keep current" : "Min 6 characters"}
-      />
+      {!isEditing && (
+        <FormField
+          label="Password"
+          type="password"
+          value={form.password}
+          onChange={(v) => updateField("password", v)}
+          placeholder="Min 6 characters"
+          required={true}
+          error={fieldErrors.password}
+        />
+      )}
 
       <FormField
         label="Department"
         value={form.department}
         onChange={(v) => updateField("department", v)}
         placeholder="e.g. Engineering, HR"
+        required={true}
+        error={fieldErrors.department}
       />
 
       <div style={{ display: "flex", gap: "10px", marginTop: "8px" }}>
