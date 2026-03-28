@@ -11,9 +11,18 @@ export default function Registration({ onGoToLogin }) {
   const [successMsg, setSuccessMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
-  // Form field update function
+  // Form field update function - clear error when user starts typing
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
+    
+    // Clear error for this field when user starts typing
+    if (fieldErrors[field]) {
+      setFieldErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   }
 
   // Registration handle function - validation and registration call

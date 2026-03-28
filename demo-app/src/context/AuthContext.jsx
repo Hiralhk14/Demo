@@ -20,7 +20,16 @@ export function AuthProvider({ children }) {
     if (savedUser) setCurrentUser(savedUser);
 
     const savedEmployees = getFromStorage(STORAGE_KEYS.employees);
-    if (savedEmployees) setEmployees(savedEmployees);
+    if (savedEmployees) {
+      // Fix old status values (migrate 'Pending' to 'pending')
+      const fixedEmployees = savedEmployees.map(emp => ({
+        ...emp,
+        status: emp.status === 'Pending' ? 'pending' : emp.status
+      }));
+      setEmployees(fixedEmployees);
+      // Save the corrected data back to storage
+      saveToStorage(STORAGE_KEYS.employees, fixedEmployees);
+    }
   }, []);
 
   // Employee data ne localStorage ma save kare

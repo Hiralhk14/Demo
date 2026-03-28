@@ -11,6 +11,29 @@ export default function Login({ onGoToRegister }) {
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
+  // Clear error when user starts typing
+  function handleEmailChange(value) {
+    setEmail(value);
+    if (fieldErrors.email) {
+      setFieldErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.email;
+        return newErrors;
+      });
+    }
+  }
+
+  function handlePasswordChange(value) {
+    setPassword(value);
+    if (fieldErrors.password) {
+      setFieldErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.password;
+        return newErrors;
+      });
+    }
+  }
+
   // Login handle function - validation and login call
   function handleLogin() {
     setErrorMsg("");
@@ -61,7 +84,7 @@ export default function Login({ onGoToRegister }) {
             label="Email Address"
             type="email"
             value={email}
-            onChange={setEmail}
+            onChange={handleEmailChange}
             placeholder="you@company.com"
             required={true}
             error={fieldErrors.email}
@@ -70,7 +93,7 @@ export default function Login({ onGoToRegister }) {
             label="Password"
             type="password"
             value={password}
-            onChange={setPassword}
+            onChange={handlePasswordChange}
             placeholder="••••••••"
             required={true}
             error={fieldErrors.password}

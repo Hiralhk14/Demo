@@ -2,6 +2,7 @@ import { useState } from "react";
 import { styles } from "../../styles/styles";
 import FormField from "../../shared/ui/FormField";
 import Modal from "../../shared/ui/Modal";
+import { validateForm } from "../../utils/validation";
 
 // Employee Form Modal - add/edit employee form
 export default function EmployeeFormModal({ existingEmployee, onClose, onSave }) {
@@ -16,32 +17,56 @@ export default function EmployeeFormModal({ existingEmployee, onClose, onSave })
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
+  // Form field update function - clear error when user starts typing
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
+    
+    // Clear error for this field when user starts typing
+    if (fieldErrors[field]) {
+      setFieldErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   }
 
   function handleSave() {
-    const { name, email, department, password } = form;
+    setErrorMsg("");
+    setFieldErrors({});
+    
+    // Create custom validation rules based on whether it's editing or adding
+    const validationRules = isEditing 
+      ? {
+          name: { type: 'name', minLength: 2 },
+          email: { type: 'email' },
+          department: { type: 'department', minLength: 2 }
+        }
+      : {
+          name: { type: 'name', minLength: 2 },
+          email: { type: 'email' },
+          password: { type: 'password', minLength: 6 },
+          department: { type: 'department', minLength: 2 }
+        };
+    
+    // Create validation data based on whether it's editing or adding
+    const validationData = isEditing 
+      ? { name: form.name, email: form.email, department: form.department }
+      : form;
+    
+    const validation = validateForm(validationData, validationRules);
+    
+    if (!validation.isValid) {
+      setFieldErrors(validation.errors);
+      return;
+    }
 
-    if (!name || !email || !department) {
-      setErrorMsg("Name, email, and department are required.");
-      return;
-    }
-    if (!isEditing && !password) {
-      setErrorMsg("Password is required.");
-      return;
-    }
-    if (password && password.length < 6) {
-      setErrorMsg("Password must be at least 6 characters.");
-      return;
-    }
-
-    //If editing and password left empty keep old password
+    // If editing and password left empty keep old password
     const dataToSave = {
-      name,
-      email,
-      department,
-      ...(password ? { password } : {}),
+      name: form.name,
+      email: form.email,
+      department: form.department,
+      ...(isEditing ? {} : { password: form.password }),
     };
 
     onSave(dataToSave);

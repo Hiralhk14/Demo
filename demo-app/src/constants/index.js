@@ -4,7 +4,7 @@ export const STORAGE_KEYS = {
 }
 
 export const EMPLOYEE_STATUS = {
-    pending: 'Pending',
+    pending: 'pending',
     active: 'active',
     blocked: 'blocked',
 }
